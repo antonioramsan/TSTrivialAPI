@@ -96,9 +96,13 @@ namespace TSTrivialAPI
                 foreach (string propname in subentities)
                 {
                     PropertyInfo piInstance = mod.GetType().GetProperty(propname);
+                    Model obj = (Model)mod.GetType().GetProperty(propname).GetValue(mod);
+                    int valor = obj.getInstanceId();
+
                     var newtype = piInstance.PropertyType.FullName;
+
                     if ((level - 1) > 0) {
-                        piInstance.SetValue(mod, this.instance(newtype.Split(".")[2], mod.getInstanceId(), level - 1));
+                        piInstance.SetValue(mod, this.instance(newtype.Split(".")[2], valor, level - 1));
                     }
                     
                 }

@@ -50,12 +50,12 @@ namespace TSTrivialAPI.Domain
             return subinstances;
         }
 
-        public override List<Model> select()
-        {
-            List<Model> lista = new List<Model>();
-            lista.Add(new Ciudad() { id = 1, Nombre = "Tuxpan",Estado= new Estado() {id=1,Nombre="Veracruz" } });
-            return lista;
-        }
+        //public override List<Model> select()
+        //{
+        //    List<Model> lista = new List<Model>();
+        //    lista.Add(new Ciudad() { id = 1, Nombre = "Tuxpan",Estado= new Estado() {id=1,Nombre="Veracruz" } });
+        //    return lista;
+        //}
 
     }
 }
