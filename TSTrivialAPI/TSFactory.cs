@@ -5,31 +5,105 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TSTrivialAPI.Domain;
+
 
 namespace TSTrivialAPI
 {
     public class TSFactory
     {
-        public TSFactory() {
+        private TSContext _context;
+        private TSRequest _request;
+        public TSFactory()
+        {
         }
+        public TSFactory(TSContext context, TSRequest request)
+        {
+            this._context = context;
+            this._request = request;
+        }
+        /// <summary>
+        /// Devuelve una instancia de un modelo
+        /// </summary>
+        /// <param name="modelname">Nombre del modelo</param>
+        /// <param name="id">Identificador de la instancia</param>
+        /// <param name="level">Nivel de intanciación</param>
+        /// <param name="workspace"></param>
+        /// <returns></returns>
         public Model instance(string modelname,
                         int id,
                         int level = 1,
                         string workspace = "")
         {
-            return new Model(); 
+            Object[] args = { this._request };
+            Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + modelname), args);
+            // -- si el nivel de subinstanciacion es cero solo debolvemos un modelo en blanco
+            if (level == 0)
+            {
+                return TrivialIntance;
+            }
+
+            // -- se recupera la instancia y se identifican las subentidades
+            var instance = TrivialIntance.select()[0];
+            List<string> subentities = instance.subinstances();
+            
+            // -- se inyecta cada una de las subinstancias
+            foreach (string propname in subentities)
+            {
+                PropertyInfo piInstance = instance.GetType().GetProperty(propname);
+                var newtype = piInstance.PropertyType.FullName;
+                piInstance.SetValue(instance, this.instance(newtype.Split(".")[2], instance.getInstanceId(), level - 1));
+            }
+            return instance;
         }
+        /// <summary>
+        /// devuelve una lista de instancias de un modelo en base a ciertos creiterios de seleccion
+        /// </summary>
+        /// <param name="modelname">Nombre del modelo</param>
+        /// <param name="filter">Filtro básico</param>
+        /// <param name="level">Nivel de instanciación</param>
+        /// <param name="order">Ordenamienro en base a propiedades</param>
+        /// <param name="selection"></param>
+        /// <param name="page">Criterio de paginación</param>
+        /// <param name="loop"></param>
+        /// <param name="workspace"></param>
+        /// <returns></returns>
         public List<Model> instances(string modelname,
-                    Dictionary<string,object> filter,
+                    Dictionary<string, object> filter,
                     int level = 1,
                     string order = "",
                     string selection = "",
-                    string page= "",
-                    int loop= 0,
-                    string workspace = "") {
-            return new List<Model>();
+                    string page = "",
+                    int loop = 0,
+                    string workspace = "")
+        {
+
+            if (level == 0)
+            {
+                return new List<Model>();
+            }
+
+            Object[] args = { this._request };
+            Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + modelname), args);
+
+            List<Model> instances = TrivialIntance.select();
+
+            foreach (Model mod in instances)
+            {
+                List<string> subentities = mod.subinstances();
+                foreach (string propname in subentities)
+                {
+                    PropertyInfo piInstance = mod.GetType().GetProperty(propname);
+                    var newtype = piInstance.PropertyType.FullName;
+                    if ((level - 1) > 0) {
+                        piInstance.SetValue(mod, this.instance(newtype.Split(".")[2], mod.getInstanceId(), level - 1));
+                    }
+                    
+                }
+            }
+            return instances;
         }
     }
 }

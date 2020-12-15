@@ -40,6 +40,15 @@ namespace TSTrivialAPI.Domain
             return list;
         }
 
+        public override List<string> subinstances() {
+
+            List<string> subinstances = new List<string>()
+            {
+               "Estado"
+            };
+
+            return subinstances;
+        }
 
         public override List<Model> select()
         {

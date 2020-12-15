@@ -13,6 +13,7 @@ namespace TSTrivialAPI.Domain
         public int id { get; set; }
         [TSField("strNombre")]
         public string Nombre { get; set; }
+        public Pais Pais { get; set; }
 
         public Estado() {
 
@@ -26,6 +27,15 @@ namespace TSTrivialAPI.Domain
             List<Model> lista = new List<Model>();
             lista.Add(new Estado() {id=1,Nombre="Veracruz" });
             return lista;
+        }
+
+        public override List<string> subinstances()
+        {
+            List<string> subinstances = new List<string>()
+            {
+               "Pais"
+            };
+            return subinstances;
         }
 
     }

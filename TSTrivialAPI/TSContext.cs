@@ -19,12 +19,9 @@ namespace TSTrivialAPI
         }
         public List<Model> read(string tquery, bool api = false)
         {
-            TSRequest reqf = new TSRequest(tquery);
-
-            Object[] args = { reqf };//{ this._request };
-            Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + reqf.model), args);
-            return TrivialIntance.select();
-            //return new List<Model>();
+            TSRequest request = new TSRequest(tquery);
+            TSFactory factory = new TSFactory(this, request);
+            return factory.instances(request.model, request.filter, request.level, request.order, "", request.page, 1, "");
         }
         List<Model> write(List<Model> datapack)
         {

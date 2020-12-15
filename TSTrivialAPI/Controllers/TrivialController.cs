@@ -71,7 +71,6 @@ namespace TSChapaAPI.Controllers
             TSContext context = new TSContext("chapa");
             return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5 + "/" + param6+"/"+param7, true);
         }
-        // POST api/values
         [HttpPost]
         public void Post([FromBody] string value)
         {

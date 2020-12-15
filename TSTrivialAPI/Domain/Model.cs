@@ -13,6 +13,7 @@ namespace TSTrivialAPI.Domain
     {
         private TSRequest _request;
         private string sqlselect = "";
+        private int InstanceId;
         public Model() {
         }
          public Model(TSRequest request)
@@ -31,11 +32,26 @@ namespace TSTrivialAPI.Domain
             sql = "select " + sql + " from " + this._request.table;
             this.sqlselect = sql;
         }
+
+        public int getInstanceId() {
+            return this.InstanceId;
+        }
+
         virtual public List<Model> select()
         {
           
             List<Model> lista = new List<Model>();
             return lista;
+        }
+        virtual public  List<string> subinstances()
+        {
+
+            List<string> subinstances = new List<string>()
+            {
+               
+            };
+
+            return subinstances;
         }
     }
 }
