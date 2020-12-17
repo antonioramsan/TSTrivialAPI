@@ -19,12 +19,13 @@ namespace TSTrivialAPI.Domain
             this._request = request;
             
         }
-        //public override List<Model> select() {
-            
-        //    List<Model> lista = new List<Model>();
-        //    lista.Add(new Pais(this._request) {id=1,Nombre="Mexico" });
-        //    return lista;
-        //}
+        public override Dictionary<string, object> DTO()
+        {
+            return new Dictionary<string, object>() {
+                {"code",id },
+                {"name",Nombre}            
+            };
+        }
 
     }
 }

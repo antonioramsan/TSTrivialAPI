@@ -11,9 +11,19 @@ namespace TSTrivialAPI.Domain
         public int intUsuario { get; set; }
         public string strNombre { get; set; }
         public string strUsuario { get; set; }
-        public Usuario() {
+
+        public Dictionary<string, object> DTO_help()
+        {
+            return new Dictionary<string, object>() {
+                {"id",intUsuario },
+                {"descripcion",strNombre}
+            };
         }
-        public Usuario(TSRequest request):base(request) {
+        public Usuario()
+        {
+        }
+        public Usuario(TSRequest request) : base(request)
+        {
         }
     }
 }

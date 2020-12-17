@@ -24,13 +24,22 @@ namespace TSTrivialAPI.Domain
 
         }
 
+        public override Dictionary<string, object> DTO()
+        {
+            return new Dictionary<string, object>() {
+                {"code",id },
+                {"name",Nombre},
+                 {"country",Pais}
+            };
+        }
+
         public override List<string> subinstances()
         {
-            List<string> subinstances = new List<string>()
+            return new List<string>()
             {
                "Pais"
             };
-            return subinstances;
+             //subinstances;
         }
 
     }

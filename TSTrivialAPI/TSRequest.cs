@@ -12,7 +12,7 @@ namespace TSTrivialAPI
     public class TSRequest
     {
         public string table { get; set; }
-        public Dictionary<string, string> properties { get; set; }
+        public Dictionary<string, object> properties { get; set; }
         public Dictionary<string, string> keys { get; set; }
         public string model { get; set; }
         /// <summary>
@@ -140,7 +140,7 @@ namespace TSTrivialAPI
             this.collectionname = collectionname;
             this.model = this.GetModel(collectionname);
 
-            this.properties = new Dictionary<string, string>();
+            this.properties = new Dictionary<string, object>();
             this.properties = this.GetFieldProperties(this.model);
             this.keys = this.GetKeyProperties(this.model);
 
@@ -294,11 +294,11 @@ namespace TSTrivialAPI
 
         }
 
-        public Dictionary<string, string> GetFieldProperties(string model)
+        public Dictionary<string, object> GetFieldProperties(string model)
         {
             Type type = Type.GetType("TSTrivialAPI.Domain." + model);
             PropertyInfo[] props = type.GetProperties();
-            Dictionary<string, string> properties = new Dictionary<string, string>();
+            Dictionary<string, object> properties = new Dictionary<string, object>();
             foreach (PropertyInfo prop in props)
             {
                 object[] attrs = prop.GetCustomAttributes(true);

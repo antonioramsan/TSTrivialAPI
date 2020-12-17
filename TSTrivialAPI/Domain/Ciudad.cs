@@ -23,19 +23,20 @@ namespace TSTrivialAPI.Domain
 
         }
 
-        public Dictionary<string, object> DTO()
+        public override Dictionary<string, object> DTO()
         {
-            Dictionary<string, object> list = new Dictionary<string, object>();
-            list["id"] = this.id;
-            list["Nombre"] = this.Nombre;
-            return list;
+            return new Dictionary<string, object>() {
+                {"code",id },
+                {"name",Nombre},
+                {"state",Estado}
+            };
         }
         public Dictionary<string, object> DTO_help()
         {
-            Dictionary<string, object> list = new Dictionary<string, object>();
-            list["code"] = this.id;
-            list["name"] = this.Nombre;
-            return list;
+            return new Dictionary<string, object>() {
+                {"id",id },
+                {"descripcion",Nombre}
+            };
         }
 
         public override List<string> subinstances() {

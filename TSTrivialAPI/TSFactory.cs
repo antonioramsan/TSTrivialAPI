@@ -116,7 +116,8 @@ namespace TSTrivialAPI
                     var newtype = piInstance.PropertyType.FullName;
 
                     if ((level - 1) > 0) {
-                        piInstance.SetValue(mod, this.instance(newtype.Split(".")[2], identificador_instancia, level - 1));
+                        var modd = this.instance(newtype.Split(".")[2], identificador_instancia, level - 1);
+                        piInstance.SetValue(mod,modd );
                     }
                     
                 }

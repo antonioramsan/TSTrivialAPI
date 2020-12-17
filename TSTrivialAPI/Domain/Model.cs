@@ -37,6 +37,16 @@ namespace TSTrivialAPI.Domain
             this.sqlselect = sql;
         }
 
+        public Dictionary<string, object> GetProperties() {
+            return this._request.properties;
+        }
+
+
+        public string GetDTOName()
+        {
+
+            return this._request.dto;
+        }
         public string getKeyName()
         {
             foreach (var ss in this._request.keys)
@@ -69,6 +79,11 @@ namespace TSTrivialAPI.Domain
             this.InstanceId = id;
         }
 
+        virtual public Dictionary<string, object> DTO()
+        {
+            Dictionary<string, object> list = new Dictionary<string, object>();
+            return list;
+        }
         virtual public List<Model> select(int id = 0)
         {
 
@@ -85,6 +100,7 @@ namespace TSTrivialAPI.Domain
                     // -- una instancia en blanco
                     Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + this._request.model), args);
 
+                    
                     foreach (var prop in this._request.properties)
                     {
                         PropertyInfo piInstancex = TrivialIntance.GetType().GetProperty(prop.Key);
@@ -102,17 +118,18 @@ namespace TSTrivialAPI.Domain
 
                         if (essub == false)
                         {
-                            piInstancex.SetValue(TrivialIntance, row[prop.Value]);
+                           
+                            piInstancex.SetValue(TrivialIntance, row[prop.Value.ToString()]);
                         }
                         else
                         {
                             PropertyInfo piInstance2 = TrivialIntance.GetType().GetProperty(prop.Key);
                             var newtype = piInstance2.PropertyType.FullName;
-                            TSRequest tsr = new TSRequest(newtype.Split(".")[2] + "/" + row[prop.Value]);
+                            TSRequest tsr = new TSRequest(newtype.Split(".")[2] + "/" + row[prop.Value.ToString()]);
                             Object[] argssub = { tsr };
                             Model SubTrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + newtype.Split(".")[2]), argssub);
                             MethodInfo piInstance3 = SubTrivialIntance.GetType().GetMethod("setInstanceId");
-                            Object[] argsm = { row[prop.Value] };
+                            Object[] argsm = { row[prop.Value.ToString()] };
                             piInstance3.Invoke(SubTrivialIntance, argsm);
                             piInstance2.SetValue(TrivialIntance, SubTrivialIntance);
 
@@ -142,12 +159,12 @@ namespace TSTrivialAPI.Domain
                 string fieldname = "";
                 if (this.getKeyName() != "")
                 {
-                    fieldname = this._request.properties[this.getKeyName()];
+                    fieldname = (string)this._request.properties[this.getKeyName()];
                 } else
                 {
                     if (this.getDefaultKeyName() != "")
                     {
-                        fieldname = this._request.properties[this.getDefaultKeyName()];
+                        fieldname = (string)this._request.properties[this.getDefaultKeyName()];
                     }
                     else {
                         fieldname = "UNKNOW_KEY_FIELD_IN_MODEL";

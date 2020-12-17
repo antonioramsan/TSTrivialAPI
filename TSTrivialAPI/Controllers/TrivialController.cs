@@ -28,14 +28,18 @@ namespace TSChapaAPI.Controllers
         public ActionResult<object> Get(string collectionname, string param1)
         {
             TSContext context = new TSContext("chapa");
-            return context.read(collectionname + "/" + param1, true);
+            var list = context.read(collectionname + "/" + param1, true);
+            var response = new TSResponse();
+            return response.select( list);    
         }
 
         [HttpGet("{collectionname}/{param1}/{param2}")]
         public ActionResult<object> Get(string collectionname, string param1, string param2)
         {
             TSContext context = new TSContext("chapa");
-            return context.read(collectionname + "/" + param1 + "/" + param2, true);
+            var list = context.read(collectionname + "/" + param1 + "/" + param2, true);
+            var response = new TSResponse();
+            return response.select(list);
         }
 
         [HttpGet("{collectionname}/{param1}/{param2}/{param3}")]
