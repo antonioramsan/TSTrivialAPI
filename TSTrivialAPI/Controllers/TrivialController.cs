@@ -51,6 +51,7 @@ namespace TSChapaAPI.Controllers
             TSContext context = new TSContext("chapa");
             return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4, true);
         }
+
         [HttpGet("{collectionname}/{param1}/{param2}/{param3}/{param4}/{param5}")]
         public ActionResult<object> Get(string collectionname, string param1, string param2, string param3, string param4, string param5)
         {
@@ -71,6 +72,7 @@ namespace TSChapaAPI.Controllers
             TSContext context = new TSContext("chapa");
             return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5 + "/" + param6+"/"+param7, true);
         }
+
         [HttpPost]
         public void Post([FromBody] string value)
         {

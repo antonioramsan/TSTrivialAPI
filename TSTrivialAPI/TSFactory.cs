@@ -37,7 +37,8 @@ namespace TSTrivialAPI
                         int level = 1,
                         string workspace = "")
         {
-            Object[] args = { this._request };
+            TSRequest tsr = new TSRequest(modelname + "/" + id);
+            Object[] args = { tsr };
             Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + modelname), args);
             // -- si el nivel de subinstanciacion es cero solo debolvemos un modelo en blanco
             if (level == 0)
@@ -46,7 +47,7 @@ namespace TSTrivialAPI
             }
 
             // -- se recupera la instancia y se identifican las subentidades
-            var instance = TrivialIntance.select()[0];
+            var instance = TrivialIntance.select(id) [0];
             List<string> subentities = instance.subinstances();
             
             // -- se inyecta cada una de las subinstancias
@@ -88,7 +89,7 @@ namespace TSTrivialAPI
             Object[] args = { this._request };
             Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + modelname), args);
 
-            List<Model> instances = TrivialIntance.select();
+            List<Model> instances = TrivialIntance.select(0);
 
             foreach (Model mod in instances)
             {
@@ -97,12 +98,25 @@ namespace TSTrivialAPI
                 {
                     PropertyInfo piInstance = mod.GetType().GetProperty(propname);
                     Model obj = (Model)mod.GetType().GetProperty(propname).GetValue(mod);
-                    int valor = obj.getInstanceId();
+                    int identificador_default = obj.getInstanceId();
+
+                    var nombre_key = obj.getKeyName();
+                    int identificador = (int)obj.GetType().GetProperty(nombre_key).GetValue(obj);
+
+                    int identificador_instancia = 0;
+                    if (identificador > 0)
+                    {
+                        identificador_instancia = identificador;
+                    }
+                    else
+                    {
+                        identificador_instancia = identificador_default;
+                    }
 
                     var newtype = piInstance.PropertyType.FullName;
 
                     if ((level - 1) > 0) {
-                        piInstance.SetValue(mod, this.instance(newtype.Split(".")[2], valor, level - 1));
+                        piInstance.SetValue(mod, this.instance(newtype.Split(".")[2], identificador_instancia, level - 1));
                     }
                     
                 }

@@ -14,11 +14,9 @@ namespace TSTrivialAPI.Domain
         [TSField("strNombre")]
         public string Nombre { get; set; }
         [TSField("intEstado")]
-        public Estado Estado { get; set; }
-        
+        public Estado Estado { get; set; }      
         public Ciudad()
         {
-
         }
         public Ciudad(TSRequest request):base(request)
         {

@@ -8,11 +8,12 @@ namespace TSTrivialAPI.Domain
     [TSTable("tblEstadosVT")]
     public class Estado : Model
     {
-
+        [TSKey("id")]
         [TSField("intEstado")]
         public int id { get; set; }
         [TSField("strNombre")]
         public string Nombre { get; set; }
+        [TSField("intPais")]
         public Pais Pais { get; set; }
 
         public Estado() {
@@ -21,12 +22,6 @@ namespace TSTrivialAPI.Domain
         public Estado(TSRequest request):base(request)
         {
 
-        }
-
-        public override List<Model> select() {
-            List<Model> lista = new List<Model>();
-            lista.Add(new Estado() {id=1,Nombre="Veracruz" });
-            return lista;
         }
 
         public override List<string> subinstances()

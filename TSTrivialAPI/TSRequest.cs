@@ -13,6 +13,7 @@ namespace TSTrivialAPI
     {
         public string table { get; set; }
         public Dictionary<string, string> properties { get; set; }
+        public Dictionary<string, string> keys { get; set; }
         public string model { get; set; }
         /// <summary>
         /// Se refiere al nombre del modelo o de su nombre como una lista
@@ -141,6 +142,7 @@ namespace TSTrivialAPI
 
             this.properties = new Dictionary<string, string>();
             this.properties = this.GetFieldProperties(this.model);
+            this.keys = this.GetKeyProperties(this.model);
 
             this.table = this.GetTableName(this.model);
 
@@ -168,6 +170,12 @@ namespace TSTrivialAPI
                     break;
                 case "ciudades":
                     return "Ciudad";
+                    break;
+                case "usuarios":
+                    return "Usuario";
+                    break;
+                case "monedas":
+                    return "Moneda";
                     break;
                 default:
                     break;
@@ -294,7 +302,7 @@ namespace TSTrivialAPI
             foreach (PropertyInfo prop in props)
             {
                 object[] attrs = prop.GetCustomAttributes(true);
-
+                bool find = false;
                 foreach (object attr in attrs)
                 {
                     string ss = attr.ToString();
@@ -302,10 +310,25 @@ namespace TSTrivialAPI
                     {
                         TSFieldAttribute TSAttr = attr as TSFieldAttribute;
                         properties[prop.Name] = TSAttr.name;
+                        find = true;
                     }
                 }
+                if (find == false) {
+                    properties[prop.Name] = prop.Name;
+                }
             }
-            return properties;
+
+
+            //foreach (PropertyInfo prop in props)
+            //{
+            //    bool ss = false;
+            //    foreach (var item in properties) {
+            //        if (item.Key == prop) {
+            //        }
+            //    }
+            //}
+
+                return properties;
         }
 
         public string GetTableName(string model)
@@ -323,6 +346,27 @@ namespace TSTrivialAPI
                 }
             }
             return model;
+        }
+        public Dictionary<string, string> GetKeyProperties(string model)
+        {
+            Type type = Type.GetType("TSTrivialAPI.Domain." + model);
+            PropertyInfo[] props = type.GetProperties();
+            Dictionary<string, string> properties = new Dictionary<string, string>();
+            foreach (PropertyInfo prop in props)
+            {
+                object[] attrs = prop.GetCustomAttributes(true);
+
+                foreach (object attr in attrs)
+                {
+                    string ss = attr.ToString();
+                    if (ss == "TSTrivialAPI.TSKeyAttribute")
+                    {
+                        TSKeyAttribute TSAttr = attr as TSKeyAttribute;
+                        properties[prop.Name] = TSAttr.name;
+                    }
+                }
+            }
+            return properties;
         }
 
         /// <summary>
