@@ -8,6 +8,7 @@ namespace TSTrivialAPI.Domain
     [TSTable("Usuarios")]
     public class Usuario : Model
     {
+        [TSKey("intUsuario")]
         public int intUsuario { get; set; }
         public string strNombre { get; set; }
         public string strUsuario { get; set; }

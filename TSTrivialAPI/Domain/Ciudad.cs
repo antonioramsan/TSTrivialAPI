@@ -25,9 +25,9 @@ namespace TSTrivialAPI.Domain
         public override Dictionary<string, object> DTO()
         {
             return new Dictionary<string, object>() {
-                {"code",id },
-                {"name",Nombre},
-                {"state",Estado}
+                {"id",id },
+                {"Nombre",Nombre},
+                {"Estado",Estado}
             };
         }
         public Dictionary<string, object> DTO_help()

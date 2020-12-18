@@ -33,9 +33,12 @@ namespace TSTrivialAPI
                 Dictionary<string, object> properties = new Dictionary<string, object>();
                 if (piInstance3 != null)
                 {
+                    
+                        properties = (Dictionary<string, object>)piInstance3.Invoke(item, null);
+
                     if (properties.Count > 0)
                     {
-                        properties = (Dictionary<string, object>)piInstance3.Invoke(item, null);
+
                     }
                     else {
                         properties = item.GetProperties();
