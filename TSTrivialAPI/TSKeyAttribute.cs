@@ -13,13 +13,9 @@ namespace TSTrivialAPI
     public class TSKeyAttribute : System.Attribute
     {
         public string name { get; set; }
-
         public TSKeyAttribute(string name)
         {
             this.name = name;
         }
     }
 }
-
-
-

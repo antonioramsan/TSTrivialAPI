@@ -22,7 +22,6 @@ namespace TSTrivialAPI.Domain
         {
 
         }
-
         public override Dictionary<string, object> DTO()
         {
             return new Dictionary<string, object>() {
@@ -35,26 +34,17 @@ namespace TSTrivialAPI.Domain
         {
             return new Dictionary<string, object>() {
                 {"id",id },
-                {"descripcion",Nombre}
+                {"descripcion",Nombre},
+                {"state",Estado}
             };
         }
 
         public override List<string> subinstances() {
-
             List<string> subinstances = new List<string>()
             {
                "Estado"
             };
-
             return subinstances;
         }
-
-        //public override List<Model> select()
-        //{
-        //    List<Model> lista = new List<Model>();
-        //    lista.Add(new Ciudad() { id = 1, Nombre = "Tuxpan",Estado= new Estado() {id=1,Nombre="Veracruz" } });
-        //    return lista;
-        //}
-
     }
 }

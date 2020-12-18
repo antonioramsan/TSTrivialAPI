@@ -1,4 +1,8 @@
-﻿using System;
+﻿/**
+ * Copyright(c) Antonio Ramírez Santander
+ * Copyright(c) TrivialSoft 2020.
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -29,14 +33,21 @@ namespace TSTrivialAPI
                 Dictionary<string, object> properties = new Dictionary<string, object>();
                 if (piInstance3 != null)
                 {
-                    properties = (Dictionary<string, object>)piInstance3.Invoke(item, null);
+                    if (properties.Count > 0)
+                    {
+                        properties = (Dictionary<string, object>)piInstance3.Invoke(item, null);
+                    }
+                    else {
+                        properties = item.GetProperties();
+                        nodto = true;
+                    }
+                    
                 }
                 else
                 {
                     properties = item.GetProperties();
                     nodto = true;
                 }
-
 
                 Dictionary<string, object> any = new Dictionary<string, object>();
                 if (nodto == false)
@@ -59,22 +70,16 @@ namespace TSTrivialAPI
                 }
                 else
                 {
-
                     foreach (var prop in properties)
                     {
                         var valor = item.GetType().GetProperty(prop.Key).GetValue(item);
                         string nestedtype = valor.GetType().ToString();
                         any[prop.Key] = valor;
                     }
-
                 }
-
-
                 list.Add(any);
             }
-
             return list;
         }
-
     }
 }

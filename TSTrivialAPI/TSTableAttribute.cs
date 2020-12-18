@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace TSTrivialAPI
 {
-    [System.AttributeUsage(System.AttributeTargets.Class)
-    ]
+    [System.AttributeUsage(System.AttributeTargets.Class)]
     public class TSTableAttribute : System.Attribute
     {
         public string name { get; set; }
@@ -21,6 +20,3 @@ namespace TSTrivialAPI
         }
     }
 }
-
-
-

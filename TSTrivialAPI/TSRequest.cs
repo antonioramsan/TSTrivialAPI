@@ -318,16 +318,6 @@ namespace TSTrivialAPI
                 }
             }
 
-
-            //foreach (PropertyInfo prop in props)
-            //{
-            //    bool ss = false;
-            //    foreach (var item in properties) {
-            //        if (item.Key == prop) {
-            //        }
-            //    }
-            //}
-
                 return properties;
         }
 
@@ -379,6 +369,5 @@ namespace TSTrivialAPI
             int result;
             return int.TryParse(valor, out result);
         }
-
     }
 }

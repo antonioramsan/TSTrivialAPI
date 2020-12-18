@@ -17,9 +17,8 @@ namespace TSTrivialAPI.Domain
 
         public Pais(TSRequest request):base(request) {
             this._request = request;
-            
         }
-        public override Dictionary<string, object> DTO()
+        public  Dictionary<string, object> DTO_help()
         {
             return new Dictionary<string, object>() {
                 {"code",id },

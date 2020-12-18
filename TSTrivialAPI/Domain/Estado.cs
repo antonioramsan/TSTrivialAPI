@@ -32,6 +32,14 @@ namespace TSTrivialAPI.Domain
                  {"country",Pais}
             };
         }
+        public  Dictionary<string, object> DTO_help()
+        {
+            return new Dictionary<string, object>() {
+                {"code",id },
+                {"name",Nombre},
+                 {"country",Pais}
+            };
+        }
 
         public override List<string> subinstances()
         {
@@ -39,8 +47,6 @@ namespace TSTrivialAPI.Domain
             {
                "Pais"
             };
-             //subinstances;
         }
-
     }
 }

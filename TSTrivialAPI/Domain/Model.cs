@@ -23,7 +23,6 @@ namespace TSTrivialAPI.Domain
         public Model(TSRequest request)
         {
             this._request = request;
-
             string sql = "";
             foreach (var prop in this._request.properties)
             {
@@ -37,14 +36,13 @@ namespace TSTrivialAPI.Domain
             this.sqlselect = sql;
         }
 
-        public Dictionary<string, object> GetProperties() {
+        public Dictionary<string, object> GetProperties()
+        {
             return this._request.properties;
         }
 
-
         public string GetDTOName()
         {
-
             return this._request.dto;
         }
         public string getKeyName()
@@ -84,23 +82,19 @@ namespace TSTrivialAPI.Domain
             Dictionary<string, object> list = new Dictionary<string, object>();
             return list;
         }
-        virtual public List<Model> select(int id = 0)
+        virtual public List<Model> select( Dictionary<string, object> filter = null)
         {
-
             List<Model> lista = new List<Model>();
-
             Object[] args = { this._request };
 
-
-            if (this._request.model !="")
+            if (this._request.model != "")
             {
-                DataTable dt = this.fillDataTable(id);
+                DataTable dt = this.fillDataTable( filter);
                 foreach (DataRow row in dt.Rows)
                 {
                     // -- una instancia en blanco
                     Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + this._request.model), args);
 
-                    
                     foreach (var prop in this._request.properties)
                     {
                         PropertyInfo piInstancex = TrivialIntance.GetType().GetProperty(prop.Key);
@@ -118,7 +112,7 @@ namespace TSTrivialAPI.Domain
 
                         if (essub == false)
                         {
-                           
+
                             piInstancex.SetValue(TrivialIntance, row[prop.Value.ToString()]);
                         }
                         else
@@ -132,47 +126,59 @@ namespace TSTrivialAPI.Domain
                             Object[] argsm = { row[prop.Value.ToString()] };
                             piInstance3.Invoke(SubTrivialIntance, argsm);
                             piInstance2.SetValue(TrivialIntance, SubTrivialIntance);
-
                         }
                     }
-
                     lista.Add(TrivialIntance);
                 }
-
-
-
             }
-
             return lista;
         }
 
-        public DataTable fillDataTable(int id = 0)
-        {
-            string query = "";
 
-            if (id == 0)
+        public string sqlcondition(Dictionary<string, object> filter)
+        {
+            string sql = "";
+
+            foreach (var item in filter)
+            {
+                if (sql != "")
+                {
+                    sql += " AND ";
+                }
+                sql += this._request.properties[item.Key] + " = @" + item.Key;
+            }
+            return sql;
+        }
+
+        public DataTable fillDataTable( Dictionary<string, object> filter = null)
+        {
+            string dummy = this.sqlcondition(filter);
+
+            string query = "";
+            
+            if (filter.Count == 0)
             {
                 query = this.sqlselect;
             }
             else
             {
-                string fieldname = "";
-                if (this.getKeyName() != "")
-                {
-                    fieldname = (string)this._request.properties[this.getKeyName()];
-                } else
-                {
-                    if (this.getDefaultKeyName() != "")
-                    {
-                        fieldname = (string)this._request.properties[this.getDefaultKeyName()];
-                    }
-                    else {
-                        fieldname = "UNKNOW_KEY_FIELD_IN_MODEL";
-                    }
-                }
-                
-
-                query = this.sqlselect + " where " + fieldname + "=" + id;
+                //string fieldname = "";
+                //if (this.getKeyName() != "")
+                //{
+                //    fieldname = (string)this._request.properties[this.getKeyName()];
+                //}
+                //else
+                //{
+                //    if (this.getDefaultKeyName() != "")
+                //    {
+                //        fieldname = (string)this._request.properties[this.getDefaultKeyName()];
+                //    }
+                //    else
+                //    {
+                //        fieldname = "UNKNOW_KEY_FIELD_IN_MODEL";
+                //    }
+                //}
+                query = this.sqlselect + " where " + dummy;// + fieldname + "=" + id;
             }
 
             SqlConnection sqlConn = new SqlConnection("Server=localhost;Database=trivial;User Id=sa;Password=314159;");
@@ -181,8 +187,15 @@ namespace TSTrivialAPI.Domain
             try
             {
                 SqlCommand cmd = new SqlCommand(query, sqlConn);
-
-                 dt = new DataTable();
+                // -- se agregan los valores
+                foreach (var xx in filter)
+                {
+                    SqlParameter param = new SqlParameter();
+                    param.ParameterName = "@" + xx.Key;
+                    param.Value = xx.Value;
+                    cmd.Parameters.Add(param);
+                }
+                dt = new DataTable();
                 dt.Load(cmd.ExecuteReader());
             }
             catch (Exception ex)
@@ -190,20 +203,15 @@ namespace TSTrivialAPI.Domain
                 string sss = ex.Message;
                 throw;
             }
-            
 
             sqlConn.Close();
             return dt;
         }
         virtual public List<string> subinstances()
         {
-
-            List<string> subinstances = new List<string>()
+            return new List<string>()
             {
-
             };
-
-            return subinstances;
         }
     }
 }

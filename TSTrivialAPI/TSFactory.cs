@@ -37,7 +37,7 @@ namespace TSTrivialAPI
                         int level = 1,
                         string workspace = "")
         {
-            TSRequest tsr = new TSRequest(modelname + "/" + id);
+            TSRequest tsr = new TSRequest(modelname + "/" + id + "/_" + this._request.dto);
             Object[] args = { tsr };
             Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + modelname), args);
             // -- si el nivel de subinstanciacion es cero solo debolvemos un modelo en blanco
@@ -46,10 +46,23 @@ namespace TSTrivialAPI
                 return TrivialIntance;
             }
 
+            var nombre_key = TrivialIntance.getKeyName();
+            if (nombre_key == "")
+            {
+                nombre_key = TrivialIntance.getDefaultKeyName();
+            }
+
+            Dictionary<string, object> filter = new Dictionary<string, object>() { };
+
+            if (id > 0)
+            {
+                filter = new Dictionary<string, object>() { { nombre_key, id } };
+            }
+
             // -- se recupera la instancia y se identifican las subentidades
-            var instance = TrivialIntance.select(id) [0];
+            var instance = TrivialIntance.select(filter)[0];
             List<string> subentities = instance.subinstances();
-            
+
             // -- se inyecta cada una de las subinstancias
             foreach (string propname in subentities)
             {
@@ -89,7 +102,18 @@ namespace TSTrivialAPI
             Object[] args = { this._request };
             Model TrivialIntance = (Model)Activator.CreateInstance(Type.GetType("TSTrivialAPI.Domain." + modelname), args);
 
-            List<Model> instances = TrivialIntance.select(0);
+            // -- reemplazar el filtro si se requiere por id
+            if (this._request.id > 0)
+            {
+                var nombre_key_top = TrivialIntance.getKeyName();
+                if (nombre_key_top == "")
+                {
+                    nombre_key_top = TrivialIntance.getDefaultKeyName();
+                }
+                filter = new Dictionary<string, object>() { { nombre_key_top, this._request.id } };
+            }
+
+            List<Model> instances = TrivialIntance.select(filter);// new Dictionary<string, object>() { }
 
             foreach (Model mod in instances)
             {
@@ -115,11 +139,11 @@ namespace TSTrivialAPI
 
                     var newtype = piInstance.PropertyType.FullName;
 
-                    if ((level - 1) > 0) {
+                    if ((level - 1) > 0)
+                    {
                         var modd = this.instance(newtype.Split(".")[2], identificador_instancia, level - 1);
-                        piInstance.SetValue(mod,modd );
+                        piInstance.SetValue(mod, modd);
                     }
-                    
                 }
             }
             return instances;
