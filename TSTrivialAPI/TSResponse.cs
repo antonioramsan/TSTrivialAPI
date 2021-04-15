@@ -57,18 +57,20 @@ namespace TSTrivialAPI
                 {
                     foreach (var prop in properties)
                     {
-                        string nestedtype2 = prop.Value.GetType().ToString();
-                        if (nestedtype2.Split(".")[0] == "System")
-                        {
-                            any[prop.Key] = prop.Value;
-                        }
-                        else
-                        {
-                            List<Model> auxx = new List<Model>();
-                            auxx.Add((Model)prop.Value);
-                            var subaux = this.select(auxx);
-                            any[prop.Key] = subaux[0];
-                        }
+                        if (prop.Value != null) {
+                            string nestedtype2 = prop.Value.GetType().ToString();
+                            if (nestedtype2.Split(".")[0] == "System")
+                            {
+                                any[prop.Key] = prop.Value;
+                            }
+                            else
+                            {
+                                List<Model> auxx = new List<Model>();
+                                auxx.Add((Model)prop.Value);
+                                var subaux = this.select(auxx);
+                                any[prop.Key] = subaux[0];
+                            }
+                        }                    
                     }
                 }
                 else
@@ -76,7 +78,7 @@ namespace TSTrivialAPI
                     foreach (var prop in properties)
                     {
                         var valor = item.GetType().GetProperty(prop.Key).GetValue(item);
-                        string nestedtype = valor.GetType().ToString();
+                       // string nestedtype = valor.GetType().ToString();
                         any[prop.Key] = valor;
                     }
                 }

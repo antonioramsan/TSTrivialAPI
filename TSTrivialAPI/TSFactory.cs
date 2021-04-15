@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using TSTrivialAPI.Domain;
 
-
 namespace TSTrivialAPI
 {
     public class TSFactory

@@ -30,7 +30,7 @@ namespace TSChapaAPI.Controllers
             TSContext context = new TSContext("chapa");
             var list = context.read(collectionname + "/" + param1, true);
             var response = new TSResponse();
-            return response.select( list);    
+            return response.select(list);
         }
 
         [HttpGet("{collectionname}/{param1}/{param2}")]
@@ -46,42 +46,50 @@ namespace TSChapaAPI.Controllers
         public ActionResult<object> Get(string collectionname, string param1, string param2, string param3)
         {
             TSContext context = new TSContext("chapa");
-            return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3, true);
+            var list = context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3, true);
+            var response = new TSResponse();
+            return response.select(list);
         }
 
         [HttpGet("{collectionname}/{param1}/{param2}/{param3}/{param4}")]
         public ActionResult<object> Get(string collectionname, string param1, string param2, string param3, string param4)
         {
             TSContext context = new TSContext("chapa");
-            return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4, true);
+            var list = context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4, true);
+            var response = new TSResponse();
+            return response.select(list);
         }
 
         [HttpGet("{collectionname}/{param1}/{param2}/{param3}/{param4}/{param5}")]
         public ActionResult<object> Get(string collectionname, string param1, string param2, string param3, string param4, string param5)
         {
             TSContext context = new TSContext("chapa");
-            return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5, true);
+            var list = context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5, true);
+            var response = new TSResponse();
+            return response.select(list);
         }
 
         [HttpGet("{collectionname}/{param1}/{param2}/{param3}/{param4}/{param5}/{param6}")]
         public ActionResult<object> Get(string collectionname, string param1, string param2, string param3, string param4, string param5, string param6)
         {
             TSContext context = new TSContext("chapa");
-            return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5+"/"+param6, true);
+            var list = context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5 + "/" + param6, true);
+            var response = new TSResponse();
+            return response.select(list);
         }
 
         [HttpGet("{collectionname}/{param1}/{param2}/{param3}/{param4}/{param5}/{param6}/{param7}")]
         public ActionResult<object> Get(string collectionname, string param1, string param2, string param3, string param4, string param5, string param6, string param7)
         {
             TSContext context = new TSContext("chapa");
-            return context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5 + "/" + param6+"/"+param7, true);
+            var list = context.read(collectionname + "/" + param1 + "/" + param2 + "/" + param3 + "/" + param4 + "/" + param5 + "/" + param6 + "/" + param7, true);
+            var response = new TSResponse();
+            return response.select(list);
         }
 
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
-
-
     }
 }

@@ -13,7 +13,6 @@ namespace TSTrivialAPI
     public class TSTableAttribute : System.Attribute
     {
         public string name { get; set; }
-
         public TSTableAttribute(string name)
         {
             this.name = name;
